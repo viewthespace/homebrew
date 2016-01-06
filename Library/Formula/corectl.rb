@@ -3,19 +3,18 @@ require "language/go"
 class Corectl < Formula
   desc "CoreOS over OS X made very simple"
   homepage "https://github.com/TheNewNormal/corectl"
-  url "https://github.com/TheNewNormal/corectl/archive/v0.0.19.tar.gz"
-  sha256 "323ebe7e3f612a2656e4b844793f62433a46604ee78455446e04db6b8bc0247e"
+  url "https://github.com/TheNewNormal/corectl/archive/v0.5.1.tar.gz"
+  sha256 "326d51a333d61d2dbe0398947dd45fd51a0d918b4649022b317c1e58ebf5fc0d"
   head "https://github.com/TheNewNormal/corectl.git", :branch => "golang"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "1b7e4448041f4f8823a2fdeed3cd5004bb44db0a5cf9e7e97c4dee366df89dbc" => :el_capitan
-    sha256 "81e1292f45a96ac886be4514599303e319b077877f7eb90ca8591c269a00cc20" => :yosemite
+    sha256 "557876385a867b0336b16b56e14cc5ac94c0def9608277a63a46e7c7b9e4aba3" => :el_capitan
+    sha256 "672d092d889293e7e28a4ca98ec85df99315ff76c03b95d4cad3fa255c7bd543" => :yosemite
   end
 
   depends_on "go" => :build
   depends_on "godep" => :build
-  depends_on "gnu-sed" => :build
   depends_on :macos => :yosemite
 
   def install
@@ -27,15 +26,6 @@ class Corectl < Formula
 
     args = []
     args << "VERSION=#{version}" if build.stable?
-
-    # system "make", "corectl", *args
-    # busts with "cannot load DWARF output from ""...
-    # similar to https://github.com/jwaldrip/homebrew-utils/issues/1
-    # workaround ...
-    ["TheNewNormal/libxhyve", "TheNewNormal/corectl/uuid2ip",
-     "yeonsh/go-ps"].each do |repo|
-      system "godep", "go", "install", "github.com/#{repo}"
-    end
 
     system "make", "corectl", *args
     system "make", "documentation/man"

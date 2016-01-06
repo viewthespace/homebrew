@@ -302,7 +302,7 @@ class FormulaAuditor
         end
 
         if dep_f.oldname && dep.name.split("/").last == dep_f.oldname
-          problem "Dependency '#{dep.name}' was renamed; use newname '#{dep_f.name}'."
+          problem "Dependency '#{dep.name}' was renamed; use new name '#{dep_f.name}'."
         end
 
         if @@aliases.include?(dep.name)
@@ -614,7 +614,7 @@ class FormulaAuditor
       problem "\"Formula.factory(name)\" is deprecated in favor of \"Formula[name]\""
     end
 
-    if text =~ /system "npm", "install"/ && text !~ %r[opt_libexec\}/npm/bin] && formula.name != "kibana"
+    if text =~ /system "npm", "install"/ && text !~ %r[opt_libexec\}/npm/bin] && formula.name !~ /^kibana(\d{2})?$/
       need_npm = "\#{Formula[\"node\"].opt_libexec\}/npm/bin"
       problem <<-EOS.undent
        Please add ENV.prepend_path \"PATH\", \"#{need_npm}"\ to def install
